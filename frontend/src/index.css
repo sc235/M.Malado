@@ -115,11 +115,27 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.5px;
 }
 
+@media (max-width: 768px) {
+  .header h1 { font-size: 2rem; }
+  .tagline { font-size: 0.95rem; }
+  .header-content { padding: 16px; gap: 10px; }
+  .header-logo { height: 60px; }
+  
+  /* Fix theme toggle and cart icons on mobile */
+  .theme-toggle { left: 12px; top: 16px; width: 40px; height: 40px; font-size: 1rem; }
+  .icons { right: 12px; top: 16px; gap: 8px; }
+  .icon-button { width: 40px; height: 40px; font-size: 1rem; }
+}
+
 /* ================= NAVIGATION ================= */
 .nav {
   display: flex; gap: 8px; justify-content: center; padding: 0 16px 20px;
   flex-wrap: wrap;
 }
+@media (max-width: 768px) {
+  .nav { gap: 4px; padding: 0 10px 16px; }
+}
+
 .nav button {
   background: transparent; 
   color: var(--text-muted); 
@@ -131,6 +147,9 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Outfit', sans-serif;
   transition: all var(--transition-fast);
   position: relative;
+}
+@media (max-width: 768px) {
+  .nav button { padding: 8px 12px; font-size: 0.9rem; }
 }
 
 .nav button::after {
@@ -286,6 +305,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px 20px 60px; min-height: 6
 .product-grid {
   display: grid; gap: 30px; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 }
+@media (max-width: 600px) {
+  .product-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .product-body h3 { font-size: 1.1rem; }
+  .product-price { font-size: 1.25rem; }
+}
   
 .product-card {
   background: var(--surface-color); 
@@ -387,6 +411,11 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px 20px 60px; min-height: 6
   border: 1px solid var(--border-color); 
   max-height: 85vh; overflow-y: auto; 
   animation: slideUp var(--transition-spring) forwards;
+}
+@media (max-width: 600px) {
+  .modal-content { padding: 20px; width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; }
+  .cart-item { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .cart-item > div:last-child { margin-left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; }
 }
 
 @keyframes slideUp {
