@@ -79,11 +79,22 @@ function Home() {
     }
   }, [location]);
 
+  const shuffleArray = (array) => {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  };
+
   const fetchProducts = async () => {
     try {
       const response = await fetch('https://mojomalado-api.onrender.com/api/products');
       const data = await response.json();
-      setProducts(data);
+      const shuffledData = shuffleArray([...data]);
+      setProducts(shuffledData);
       setLoading(false);
     } catch (error) {
       console.error('Erreur de chargement:', error);
