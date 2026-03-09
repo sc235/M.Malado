@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 
 function Home() {
   const [products, setProducts] = useState([]);
   const [displayedProducts, setDisplayedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortOption, setSortOption] = useState('default');
@@ -62,6 +64,20 @@ function Home() {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else if (location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [location]);
 
   const fetchProducts = async () => {
     try {
