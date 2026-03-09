@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { supabase } from '../supabaseClient';
 
 function Header() {
   const { cart, wishlist, setIsCartOpen, setIsWishlistOpen } = useCart();
   const [theme, setTheme] = useState('light');
+  const [session, setSession] = useState(null);
 
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const wishlistCount = wishlist.length;
@@ -13,6 +15,18 @@ function Header() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     setTheme(savedTheme);
     document.documentElement.setAttribute('data-theme', savedTheme);
+
+    // Initial session check
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    // Listen for auth changes (login/logout)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const toggleTheme = () => {
@@ -41,7 +55,9 @@ function Header() {
           <Link to="/#shop"><button>Boutique</button></Link>
           <Link to="/#about"><button>À propos</button></Link>
           <Link to="/#contact"><button>Contact</button></Link>
-          <Link to="/admin"><button>Admin</button></Link>
+          {session && (
+            <Link to="/admin"><button>Admin</button></Link>
+          )}
         </nav>
       </header>
 
