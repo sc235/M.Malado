@@ -23,7 +23,7 @@ function Cart() {
     message += `\nTotal : ${total.toLocaleString()} FCFA\n\nMerci !`;
     const whatsappUrl = `https://wa.me/221710433624?text=${encodeURIComponent(message)}`;
     
-    fetch('https://mojomolado-api.onrender.com/api/orders', {
+    fetch('https://mojomalado-api.onrender.com/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items: cart, total })

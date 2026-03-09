@@ -81,7 +81,7 @@ function Home() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('https://mojomolado-api.onrender.com/api/products');
+      const response = await fetch('https://mojomalado-api.onrender.com/api/products');
       const data = await response.json();
       setProducts(data);
       setLoading(false);
