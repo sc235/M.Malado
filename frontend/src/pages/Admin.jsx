@@ -12,8 +12,10 @@ export default function Admin() {
   const [products, setProducts] = useState([]);
   const [sales, setSales] = useState([]);
   const [newProduct, setNewProduct] = useState({
-    name: '', category: 'Vêtements', price: '', price_display: '', image: '', description: ''
+    name: '', category: 'Vêtements', price: '', price_display: '', description: ''
   });
+  const [imageFile, setImageFile] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [editPrices, setEditPrices] = useState({});
 
   useEffect(() => {
@@ -64,14 +66,45 @@ export default function Admin() {
       newProduct.price_display = `${newProduct.price} FCFA`;
     }
     
+    if (!imageFile) {
+      alert("Veuillez sélectionner une image pour le produit.");
+      return;
+    }
+
     try {
+      setUploadingImage(true);
+      
+      // 1. Upload image to Supabase Storage
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `${newProduct.category.toLowerCase()}/${fileName}`;
+      
+      const { error: uploadError, data: uploadData } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, imageFile);
+
+      if (uploadError) {
+        throw new Error(`Erreur d'upload d'image: ${uploadError.message}`);
+      }
+      
+      // 2. Get public URL of the uploaded image
+      const { data: { publicUrl } } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(filePath);
+
+      // 3. Save product in database via Node backend
+      const productToSave = {
+        ...newProduct,
+        image: publicUrl
+      };
+
       const response = await fetch('https://mojomalado-api.onrender.com/api/products', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`
         },
-        body: JSON.stringify(newProduct)
+        body: JSON.stringify(productToSave)
       });
       
       if (!response.ok) {
@@ -80,10 +113,18 @@ export default function Admin() {
       }
       
       alert("Produit ajouté avec succès !");
-      setNewProduct({ name: '', category: 'Vêtements', price: '', price_display: '', image: '', description: '' });
+      setNewProduct({ name: '', category: 'Vêtements', price: '', price_display: '', description: '' });
+      setImageFile(null);
+      
+      // Reset the file input visually
+      const fileInput = document.getElementById('image-upload');
+      if (fileInput) fileInput.value = '';
+      
       loadAdminData();
     } catch (error) {
        alert("Erreur lors de l'ajout: " + error.message);
+    } finally {
+      setUploadingImage(false);
     }
   };
 
@@ -195,13 +236,23 @@ export default function Admin() {
               </div>
 
               <div>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Chemin de l'image</label>
-                <input type="text" placeholder="Ex: robes.images/robeRouge.jpg" value={newProduct.image} onChange={e => setNewProduct({...newProduct, image: e.target.value})} required style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-main)' }}/>
-                <small style={{ color: 'var(--text-muted)', marginTop: '4px', display: 'block' }}>L'image doit exister dans le dossier public (ex: robes.images/, sac.images/...).</small>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Image du produit</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--bg-color)', padding: '8px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                  <input 
+                    id="image-upload"
+                    type="file" 
+                    accept="image/*"
+                    onChange={e => setImageFile(e.target.files[0])} 
+                    required 
+                    style={{ flex: 1, color: 'var(--text-main)' }}
+                  />
+                  {imageFile && <span style={{ fontSize: '0.8rem', color: 'var(--primary)' }}><i className="fas fa-check-circle"></i> Sélectionnée</span>}
+                </div>
+                <small style={{ color: 'var(--text-muted)', marginTop: '4px', display: 'block' }}>L'image sera automatiquement téléchargée vers Supabase.</small>
               </div>
 
-              <button type="submit" style={{ marginTop: '10px', padding: '14px', background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '1.05rem', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(217,119,6,0.2)' }} onMouseEnter={e => e.currentTarget.style.transform='translateY(-2px)'} onMouseLeave={e => e.currentTarget.style.transform='translateY(0)'}>
-                <i className="fas fa-save"></i> Enregistrer le produit
+              <button type="submit" disabled={uploadingImage} style={{ marginTop: '10px', padding: '14px', background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '1.05rem', cursor: uploadingImage ? 'not-allowed' : 'pointer', opacity: uploadingImage ? 0.7 : 1, transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(217,119,6,0.2)' }}>
+                {uploadingImage ? <><i className="fas fa-spinner fa-spin"></i> Téléchargement en cours...</> : <><i className="fas fa-save"></i> Enregistrer le produit</>}
               </button>
             </form>
           </section>
