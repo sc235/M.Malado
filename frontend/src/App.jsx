@@ -15,7 +15,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/gestion-mojo-privee" element={<Admin />} />
         </Routes>
         <Footer />
         <Cart />

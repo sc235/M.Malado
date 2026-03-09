@@ -56,7 +56,7 @@ function Header() {
           <Link to="/#about"><button>À propos</button></Link>
           <Link to="/#contact"><button>Contact</button></Link>
           {session && (
-            <Link to="/admin"><button>Admin</button></Link>
+            <Link to="/gestion-mojo-privee"><button>Admin</button></Link>
           )}
         </nav>
       </header>
