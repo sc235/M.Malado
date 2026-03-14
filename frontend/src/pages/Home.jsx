@@ -12,6 +12,7 @@ function Home() {
   const [sortOption, setSortOption] = useState('default');
   const [page, setPage] = useState(1);
   const itemsPerPage = 8;
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const defaultReviews = [
     {
@@ -187,17 +188,20 @@ function Home() {
                     <i className={isFav ? 'fas fa-heart' : 'far fa-heart'} style={{ color: isFav ? '#ff4444' : 'var(--text-color)', fontSize: '18px' }}></i>
                   </button>
                 </div>
-                <div className="image-container">
+                <div className="image-container" onClick={() => setSelectedProduct(product)} style={{ cursor: 'pointer' }}>
                   <img src={imagePath} alt={product.name} loading="lazy" />
+                  <div className="quick-view-overlay">
+                    <span>Voir détails</span>
+                  </div>
                 </div>
                 <div className="product-body">
-                  <h3>{product.name}</h3>
+                  <h3 onClick={() => setSelectedProduct(product)} style={{ cursor: 'pointer' }}>{product.name}</h3>
                   <div className="product-price">{product.price_display || `${product.price} FCFA`}</div>
                   <div className="rating">
                     {getRatingStars(product.rating || 4.5)} <span>{product.rating || 4.5}</span>
                   </div>
                   <div className="product-actions">
-                    <button className="primary" onClick={() => addToCart(product)}>
+                    <button className="primary" onClick={(e) => { e.stopPropagation(); addToCart(product); }}>
                       <i className="fas fa-cart-plus"></i> Ajouter
                     </button>
                   </div>
@@ -340,6 +344,61 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* MODAL DE DÉTAILS DU PRODUIT */}
+      {selectedProduct && (
+        <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && setSelectedProduct(null)}>
+          <div className="modal-content product-details-modal" style={{ maxWidth: '900px', display: 'flex', flexDirection: window.innerWidth < 768 ? 'column' : 'row', gap: '30px', padding: window.innerWidth < 768 ? '20px' : '40px' }}>
+            <button className="close-modal" onClick={() => setSelectedProduct(null)}>&times;</button>
+            
+            <div style={{ flex: '1', borderRadius: 'var(--radius-md)', overflow: 'hidden', background: 'var(--border-color)', minHeight: '300px' }}>
+              <img 
+                src={selectedProduct.image.startsWith('http') ? selectedProduct.image : (selectedProduct.image.startsWith('/') ? selectedProduct.image : `/${selectedProduct.image}`)} 
+                alt={selectedProduct.name} 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+              />
+            </div>
+            
+            <div style={{ flex: '1', display: 'flex', flexDirection: 'column' }}>
+              <span style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
+                {selectedProduct.category}
+              </span>
+              <h2 style={{ fontSize: window.innerWidth < 768 ? '2rem' : '2.5rem', marginBottom: '16px', lineHeight: '1.2' }}>{selectedProduct.name}</h2>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '24px' }}>
+                <div className="rating" style={{ margin: 0 }}>
+                  {getRatingStars(selectedProduct.rating || 4.5)}
+                </div>
+                <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>(Avis clients)</span>
+              </div>
+              
+              <div style={{ fontSize: '2rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '24px' }}>
+                {selectedProduct.price_display || `${selectedProduct.price} FCFA`}
+              </div>
+              
+              <div style={{ background: 'var(--bg-color)', padding: '20px', borderRadius: 'var(--radius-md)', marginBottom: '30px' }}>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '10px', color: 'var(--text-main)' }}>Description</h4>
+                <p style={{ color: 'var(--text-muted)', lineHeight: '1.7', whiteSpace: 'pre-line' }}>
+                  {selectedProduct.description || "Aucune description détaillée n'est disponible pour ce produit pour le moment. Fabriqué avec soin et passion."}
+                </p>
+              </div>
+              
+              <div style={{ marginTop: 'auto', display: 'grid', gridTemplateColumns: '1fr', gap: '15px' }}>
+                <button 
+                  className="btn-checkout" 
+                  style={{ background: 'var(--primary)', margin: 0, boxShadow: 'var(--shadow-md)' }}
+                  onClick={() => {
+                    addToCart(selectedProduct);
+                    setSelectedProduct(null); // Ferme la modale après ajout
+                  }}
+                >
+                  <i className="fas fa-cart-plus" style={{ marginRight: '8px' }}></i> Ajouter au panier
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

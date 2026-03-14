@@ -334,6 +334,25 @@ main { max-width: 1200px; margin: 0 auto; padding: 20px 20px 60px; min-height: 6
   aspect-ratio: 4/5;
 }
 
+.quick-view-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity var(--transition-normal);
+  z-index: 5;
+}
+
+.quick-view-overlay span {
+  background: var(--surface-color); color: var(--text-main);
+  padding: 10px 20px; border-radius: var(--radius-full);
+  font-weight: 600; font-family: 'Outfit', sans-serif;
+  transform: translateY(20px); transition: transform var(--transition-normal);
+  box-shadow: var(--shadow-md);
+}
+
+.product-card:hover .quick-view-overlay { opacity: 1; }
+.product-card:hover .quick-view-overlay span { transform: translateY(0); }
+
 .product-card img { 
   width: 100%; height: 100%; 
   object-fit: cover; 
