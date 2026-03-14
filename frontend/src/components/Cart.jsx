@@ -23,17 +23,22 @@ function Cart() {
     message += `\nTotal : ${total.toLocaleString()} FCFA\n\nMerci !`;
     const whatsappUrl = `https://wa.me/221710433624?text=${encodeURIComponent(message)}`;
     
+    // 1. Ouvrir WhatsApp immédiatement ! 
+    // N'attend pas la réponse de l'API pour éviter les bloqueurs de pop-up 
+    // et ne pas bloquer le client si le serveur est en veille.
+    window.open(whatsappUrl, '_blank');
+    
+    // 2. Vider le panier et fermer la fenêtre
+    clearCart();
+    setIsCartOpen(false);
+    
+    // 3. Enregistrer la commande en arrière-plan (si ça échoue, pas grave, le message WA est parti)
     fetch('https://mojomalado-api.onrender.com/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items: cart, total })
-    }).then(() => {
-      window.open(whatsappUrl, '_blank');
-      clearCart();
-      setIsCartOpen(false);
     }).catch(err => {
-      console.error(err);
-      alert("Erreur lors de la création de la commande.");
+      console.error("Erreur back-end ignorée:", err);
     });
   };
 
