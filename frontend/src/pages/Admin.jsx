@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function Admin() {
   const [session, setSession] = useState(null);
@@ -11,6 +12,7 @@ export default function Admin() {
   // Dashboard states
   const [products, setProducts] = useState([]);
   const [sales, setSales] = useState([]);
+  const [chartData, setChartData] = useState([]);
   const [newProduct, setNewProduct] = useState({
     name: '', category: 'Vêtements', price: '', price_display: '', description: ''
   });
@@ -36,7 +38,24 @@ export default function Admin() {
     if (prodData) setProducts(prodData);
     
     const { data: salesData } = await supabase.from('sales').select('*').order('created_at', { ascending: false });
-    if (salesData) setSales(salesData);
+    if (salesData) {
+      setSales(salesData);
+      
+      // Process data for chart: group by date and sum totals
+      const groupedData = salesData.reduce((acc, sale) => {
+        const date = sale.date || new Date(sale.created_at).toLocaleDateString('fr-FR');
+        if (!acc[date]) acc[date] = 0;
+        acc[date] += sale.total;
+        return acc;
+      }, {});
+      
+      const formattedChartData = Object.keys(groupedData)
+        .map(date => ({ date, total: groupedData[date] }))
+        .slice(0, 7) // Last 7 days with sales
+        .reverse(); // Chronological order
+        
+      setChartData(formattedChartData);
+    }
   };
 
   const handleAuth = async (e) => {
@@ -259,6 +278,25 @@ export default function Admin() {
 
           <section style={{ background: 'var(--surface-color)', padding: '30px', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border-color)' }}>
             <h3 style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--secondary)' }}><i className="fas fa-chart-line"></i> Dernières Ventes</h3>
+            
+            {/* GRAPHIQUE DES VENTES */}
+            {chartData.length > 0 && (
+              <div style={{ width: '100%', height: '250px', marginBottom: '30px', paddingBottom: '20px', borderBottom: '1px solid var(--border-color)' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
+                    <XAxis dataKey="date" tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
+                    <YAxis tickFormatter={(val) => `${val/1000}k`} tick={{ fill: 'var(--text-muted)', fontSize: 12 }} axisLine={false} tickLine={false} />
+                    <Tooltip 
+                      formatter={(value) => [`${value.toLocaleString()} FCFA`, 'Ventes']}
+                      contentStyle={{ background: 'var(--surface-color)', border: '1px solid var(--border-color)', borderRadius: '8px', boxShadow: 'var(--shadow-lg)' }}
+                    />
+                    <Bar dataKey="total" fill="var(--primary)" radius={[4, 4, 0, 0]} barSize={40} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+
             {sales.length === 0 ? (
               <div style={{ padding: '30px', textAlign: 'center', background: 'var(--bg-color)', borderRadius: '8px', color: 'var(--text-muted)' }}>
                 <i className="fas fa-shopping-bag" style={{ fontSize: '2rem', marginBottom: '10px', opacity: 0.5 }}></i>
