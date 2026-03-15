@@ -8,76 +8,163 @@ function Cart() {
   
   if (!isCartOpen) return null;
 
-  const handleCheckout = () => {
+  const [paymentMethod, setPaymentMethod] = React.useState(''); // 'whatsapp' ou 'wave'
+
+  const handleCheckout = (method) => {
     if (!cart.length) {
       alert('Votre panier est vide');
       return;
     }
     
+    setPaymentMethod(method);
+
     let message = "Bonjour Mojo Molado ! Je souhaite commander :\n\n";
     cart.forEach((item, i) => {
       const prixAffiche = item.price_display || (item.price + " FCFA");
       message += `${i + 1}. ${item.name} - ${prixAffiche} x${item.quantity}\n`;
     });
     
-    message += `\nTotal : ${total.toLocaleString()} FCFA\n\nMerci !`;
+    // Si méthode = wave, on l'ajoute au message pour le vendeur
+    if (method === 'wave') {
+      message += `\nTotal : ${total.toLocaleString()} FCFA\n\n*Paiement : Virement WAVE effectué.*`;
+    } else {
+      message += `\nTotal : ${total.toLocaleString()} FCFA\n\nMerci !`;
+    }
+
     const whatsappUrl = `https://wa.me/221710433624?text=${encodeURIComponent(message)}`;
     
-    // 1. Ouvrir WhatsApp immédiatement ! 
-    // N'attend pas la réponse de l'API pour éviter les bloqueurs de pop-up 
-    // et ne pas bloquer le client si le serveur est en veille.
-    window.open(whatsappUrl, '_blank');
+    // Si c'est juste un checkout WhatsApp normal, on redirige tout de suite
+    if (method === 'whatsapp') {
+      executeOrder(whatsappUrl);
+    }
+    // Si Wave, l'UI affichera les instructions, puis l'utilisateur cliquera "J'ai payé" pour déclencher executeOrder
+  };
+
+  const executeOrder = (whatsappUrl) => {
+    // 1. Ouvrir WhatsApp immédiatement !
+    if (whatsappUrl) window.open(whatsappUrl, '_blank');
     
     // 2. Vider le panier et fermer la fenêtre
     clearCart();
     setIsCartOpen(false);
+    setPaymentMethod(''); // reset
     
-    // 3. Enregistrer la commande en arrière-plan (si ça échoue, pas grave, le message WA est parti)
+    // 3. Enregistrer la commande en arrière-plan
     fetch('https://mojomalado-api.onrender.com/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: cart, total })
+      body: JSON.stringify({ items: cart, total, method: paymentMethod })
     }).catch(err => {
       console.error("Erreur back-end ignorée:", err);
     });
   };
 
   return (
-    <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && setIsCartOpen(false)}>
+    <div className="modal-overlay" onClick={(e) => {
+      if (e.target.className === 'modal-overlay') {
+        setIsCartOpen(false);
+        setPaymentMethod('');
+      }
+    }}>
       <div className="modal-content">
-        <button className="close-modal" onClick={() => setIsCartOpen(false)}>&times;</button>
-        <h2>Votre Panier</h2>
-        <div style={{ maxHeight: '60vh', overflowY: 'auto' }}>
-          {cart.map(item => (
-            <div key={item.id} className="cart-item">
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600 }}>{item.name}</div>
-                <div style={{ fontSize: '14px', color: 'var(--text-color)', opacity: 0.7 }}>
-                  {item.price_display || `${item.price} FCFA`} chacun
+        <button className="close-modal" onClick={() => { setIsCartOpen(false); setPaymentMethod(''); }}>&times;</button>
+        
+        {paymentMethod === 'wave' ? (
+          <div style={{ textAlign: 'center', padding: '20px' }}>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Wave_logo.png/600px-Wave_logo.png" alt="Wave" style={{ height: '50px', marginBottom: '20px' }} />
+            <h2 style={{ fontSize: '1.8rem', color: '#13B1E6', marginBottom: '20px' }}>Paiement via Wave</h2>
+            <p style={{ fontSize: '1.1rem', marginBottom: '15px' }}>
+              Pour valider votre commande, veuillez envoyer <strong>{total.toLocaleString()} FCFA</strong> au numéro suivant :
+            </p>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', letterSpacing: '2px', color: 'var(--text-main)', background: 'var(--bg-color)', padding: '15px', borderRadius: '12px', margin: '20px 0' }}>
+              71 043 36 24
+            </div>
+            <p style={{ color: 'var(--text-muted)', marginBottom: '30px', fontSize: '0.9rem' }}>
+              Une fois le transfert effectué, cliquez sur le bouton ci-dessous pour confirmer via WhatsApp.
+            </p>
+            <button 
+              className="btn-checkout" 
+              style={{ background: '#13B1E6', marginTop: 0 }}
+              onClick={() => {
+                let message = "Bonjour Mojo Molado ! Je souhaite commander :\n\n";
+                cart.forEach((item, i) => {
+                  message += `${i + 1}. ${item.name} x${item.quantity}\n`;
+                });
+                message += `\nTotal : ${total.toLocaleString()} FCFA\n\n*J'ai transféré le montant par Wave. Voici ma confirmation.*`;
+                const whatsappUrl = `https://wa.me/221710433624?text=${encodeURIComponent(message)}`;
+                executeOrder(whatsappUrl);
+              }}
+            >
+              <i className="fas fa-check-circle" style={{ marginRight: '8px' }}></i> J'ai effectué le paiement
+            </button>
+            <button 
+              onClick={() => setPaymentMethod('')} 
+              style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', textDecoration: 'underline', marginTop: '15px', cursor: 'pointer', fontWeight: 'bold' }}
+            >
+              Retour au panier
+            </button>
+          </div>
+        ) : (
+          <>
+            <h2>Votre Panier</h2>
+            <div style={{ maxHeight: '50vh', overflowY: 'auto' }}>
+              {cart.map(item => (
+                <div key={item.id} className="cart-item">
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600 }}>{item.name}</div>
+                    <div style={{ fontSize: '14px', color: 'var(--text-color)', opacity: 0.7 }}>
+                      {item.price_display || `${item.price} FCFA`} chacun
+                    </div>
+                  </div>
+                  <div className="cart-item-controls">
+                    <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
+                    <span>{item.quantity}</span>
+                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+                  </div>
+                  <div style={{ textAlign: 'right', marginLeft: '16px' }}>
+                    <div style={{ fontWeight: 600 }}>{(item.price * item.quantity).toLocaleString()} FCFA</div>
+                    <button 
+                      onClick={() => removeFromCart(item.id)} 
+                      style={{ background: '#ff4444', color: 'white', border: 'none', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', marginTop: '4px' }}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="cart-item-controls">
-                <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
-                <span>{item.quantity}</span>
-                <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
-              </div>
-              <div style={{ textAlign: 'right', marginLeft: '16px' }}>
-                <div style={{ fontWeight: 600 }}>{(item.price * item.quantity).toLocaleString()} FCFA</div>
+              ))}
+              {cart.length === 0 && <p>Panier vide.</p>}
+            </div>
+            
+            <p style={{ marginTop: '16px', fontSize: '1.8rem', textAlign: 'right' }}>
+              <strong>Total: {total.toLocaleString()} FCFA</strong>
+            </p>
+            
+            {cart.length > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px' }}>
                 <button 
-                  onClick={() => removeFromCart(item.id)} 
-                  style={{ background: '#ff4444', color: 'white', border: 'none', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', marginTop: '4px' }}
+                  className="btn-checkout" 
+                  style={{ background: '#13B1E6', margin: 0, boxShadow: '0 4px 15px rgba(19, 177, 230, 0.4)' }} 
+                  onClick={() => handleCheckout('wave')}
                 >
-                  Supprimer
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Wave_logo.png/600px-Wave_logo.png" alt="Wave" style={{ height: '24px', marginRight: '8px', filter: 'brightness(0) invert(1)' }} />
+                  Payer avec Wave
+                </button>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                  <span style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></span>
+                  <span style={{ padding: '0 10px' }}>OU</span>
+                  <span style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></span>
+                </div>
+                <button 
+                  className="btn-checkout" 
+                  style={{ background: '#25D366', margin: 0 }} 
+                  onClick={() => handleCheckout('whatsapp')}
+                >
+                  <i className="fab fa-whatsapp" style={{ fontSize: '1.4rem', marginRight: '8px' }}></i> Commander via WhatsApp
                 </button>
               </div>
-            </div>
-          ))}
-          {cart.length === 0 && <p>Panier vide.</p>}
-        </div>
-        <p style={{ marginTop: '16px', fontSize: '18px' }}>
-          <strong>Total: {total.toLocaleString()} FCFA</strong>
-        </p>
-        <button className="btn-checkout" onClick={handleCheckout}>Commander via WhatsApp</button>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

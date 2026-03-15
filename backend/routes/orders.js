@@ -17,7 +17,13 @@ router.post('/', async (req, res) => {
       .select('id, price')
       .in('id', itemIds);
 
-    if (prodErr || !dbProducts) throw new Error("Erreur de validation des produits");
+    if (prodErr || !dbProducts) {
+      console.error("Supabase error fetching products:", prodErr);
+      throw new Error("Erreur de validation des produits");
+    }
+
+    console.log("Incoming item IDs:", itemIds);
+    console.log("Products found in DB:", dbProducts);
 
     let serverCalculatedTotal = 0;
     
