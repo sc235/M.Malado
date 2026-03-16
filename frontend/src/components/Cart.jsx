@@ -73,14 +73,39 @@ function Cart() {
           <div style={{ textAlign: 'center', padding: '20px' }}>
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Wave_logo.png/600px-Wave_logo.png" alt="Wave" style={{ height: '50px', marginBottom: '20px' }} />
             <h2 style={{ fontSize: '1.8rem', color: '#13B1E6', marginBottom: '20px' }}>Paiement via Wave</h2>
+            
             <p style={{ fontSize: '1.1rem', marginBottom: '15px' }}>
-              Pour valider votre commande, veuillez envoyer <strong>{total.toLocaleString()} FCFA</strong> au numéro suivant :
+              Montant à régler : <strong>{total.toLocaleString()} FCFA</strong>
             </p>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', letterSpacing: '2px', color: 'var(--text-main)', background: 'var(--bg-color)', padding: '15px', borderRadius: '12px', margin: '20px 0' }}>
-              71 043 36 24
+
+            <div style={{ background: 'var(--bg-color)', padding: '20px', borderRadius: '12px', margin: '20px 0', border: '1px solid var(--border-color)' }}>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '10px' }}>Numéro du destinataire :</p>
+              <div style={{ fontSize: '2.5rem', fontWeight: '800', letterSpacing: '2px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+                71 043 36 24
+                <button 
+                  onClick={() => {
+                    navigator.clipboard.writeText('710433624');
+                    alert('Numéro copié !');
+                  }}
+                  style={{ background: 'var(--surface-color)', border: '1px solid var(--border-color)', borderRadius: '50%', width: '40px', height: '40px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)', boxShadow: 'var(--shadow-sm)' }}
+                  title="Copier le numéro"
+                >
+                  <i className="far fa-copy"></i>
+                </button>
+              </div>
             </div>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '30px', fontSize: '0.9rem' }}>
-              Une fois le transfert effectué, cliquez sur le bouton ci-dessous pour confirmer via WhatsApp.
+
+            {/* Bouton pour tenter d'ouvrir l'application (surtout utile sur mobile) */}
+            <a 
+              href="wave://" 
+              className="btn-checkout" 
+              style={{ background: '#f3f4f6', color: '#13B1E6', border: '2px solid #13B1E6', marginTop: '10px', boxShadow: 'none' }}
+            >
+              <i className="fas fa-external-link-alt" style={{ marginRight: '8px' }}></i> Ouvrir l'application Wave
+            </a>
+
+            <p style={{ color: 'var(--text-muted)', margin: '30px 0 15px', fontSize: '0.95rem' }}>
+              Une fois le transfert effectué depuis votre application, cliquez ci-dessous pour valider la commande.
             </p>
             <button 
               className="btn-checkout" 
@@ -90,7 +115,7 @@ function Cart() {
                 cart.forEach((item, i) => {
                   message += `${i + 1}. ${item.name} x${item.quantity}\n`;
                 });
-                message += `\nTotal : ${total.toLocaleString()} FCFA\n\n*J'ai transféré le montant par Wave. Voici ma confirmation.*`;
+                message += `\nTotal : ${total.toLocaleString()} FCFA\n\n*J'ai transféré le montant par Wave au 71 043 36 24. Voici ma confirmation.*`;
                 const whatsappUrl = `https://wa.me/221710433624?text=${encodeURIComponent(message)}`;
                 executeOrder(whatsappUrl);
               }}
