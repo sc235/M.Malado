@@ -1,8 +1,8 @@
 require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY || process.env.SUPABASE_ANON_KEY;
+const supabaseUrl = "https://jshsryngogxsmdhwzije.supabase.co";
+const supabaseKey = "sb_publishable_G6Q2fWrkczI4nd";
 
 if (!supabaseUrl || !supabaseKey) {
   console.warn("Missing Supabase credentials in .env");

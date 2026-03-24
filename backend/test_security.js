@@ -46,6 +46,27 @@ async function runTests() {
   } catch (err) {
     console.error("Erreur:", err.message);
   }
+
+  // Test 3: Vérification des Headers de Sécurité (Helmet)
+  console.log("\n[Test 3] Vérification des en-têtes (headers) de sécurité (Bouclier Helmet)...");
+  try {
+    const res3 = await fetch('http://localhost:5000/api/health');
+    const headers = res3.headers;
+    
+    // Helmet retire "X-Powered-By" et ajoute des protections
+    const hasHelmet = headers.get('x-content-type-options') === 'nosniff';
+    const hidePoweredBy = !headers.get('x-powered-by');
+
+    if (hasHelmet && hidePoweredBy) {
+      console.log(" ✅ SUCCÈS : Le bouclier 'Helmet' est actif. Les informations techniques sont cachées et les protections 'Anti-Sniffing' sont en place.");
+    } else {
+      console.log(" ⚠️ ALERTE : Certaines protections Helmet ne semblent pas détectées.");
+    }
+  } catch (err) {
+    console.error("Erreur:", err.message);
+  }
+
+  console.log("\n=== FIN DES TESTS DE SÉCURITÉ ===");
 }
 
 runTests();
