@@ -308,6 +308,7 @@ export default function Admin() {
                   <thead>
                     <tr style={{ borderBottom: '2px solid var(--border-color)' }}>
                       <th style={{ padding: '12px 8px', color: 'var(--text-muted)' }}>Date</th>
+                      <th style={{ padding: '12px 8px', color: 'var(--text-muted)' }}>Client</th>
                       <th style={{ padding: '12px 8px', color: 'var(--text-muted)' }}>Total</th>
                       <th style={{ padding: '12px 8px', color: 'var(--text-muted)' }}>Articles</th>
                     </tr>
@@ -316,9 +317,13 @@ export default function Admin() {
                     {sales.slice(0, 5).map(s => (
                       <tr key={s.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
                         <td style={{ padding: '12px 8px' }}>{s.date || new Date(s.created_at).toLocaleDateString()}</td>
+                        <td style={{ padding: '12px 8px' }}>
+                          <div style={{ fontWeight: '600' }}>{s.customer_name || 'Inconnu'}</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{s.customer_phone || ''}</div>
+                        </td>
                         <td style={{ padding: '12px 8px', fontWeight: 'bold', color: 'var(--primary)' }}>{s.total.toLocaleString()} FCFA</td>
                         <td style={{ padding: '12px 8px' }}>
-                          <span style={{ background: 'var(--bg-color)', padding: '4px 8px', borderRadius: '4px', fontSize: '0.85rem' }}>
+                          <span style={{ background: 'var(--bg-color)', padding: '4px 8px', borderRadius: '4px', fontSize: '0.85rem' }} title={s.customer_address}>
                             {s.items?.length || 0} art.
                           </span>
                         </td>

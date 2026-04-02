@@ -42,7 +42,10 @@ router.post('/', async (req, res) => {
     const orderData = {
       date: new Date().toISOString().split('T')[0],
       items: items,
-      total: serverCalculatedTotal
+      total: serverCalculatedTotal,
+      customer_name: customerInfo?.name || 'Inconnu',
+      customer_phone: customerInfo?.phone || 'Non fourni',
+      customer_address: customerInfo?.address || 'Non fournie'
     };
 
     const { data, error } = await supabase

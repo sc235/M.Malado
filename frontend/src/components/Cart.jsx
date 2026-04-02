@@ -9,16 +9,24 @@ function Cart() {
   if (!isCartOpen) return null;
 
   const [paymentMethod, setPaymentMethod] = React.useState(''); // 'whatsapp' ou 'wave'
+  const [customerInfo, setCustomerInfo] = React.useState({ name: '', phone: '', address: '' });
 
   const handleCheckout = (method) => {
     if (!cart.length) {
       alert('Votre panier est vide');
       return;
     }
+
+    if (!customerInfo.name || !customerInfo.phone || !customerInfo.address) {
+      alert('Veuillez remplir vos informations (Nom, Téléphone et Adresse) avant de commander.');
+      return;
+    }
     
     setPaymentMethod(method);
 
-    let message = "Bonjour Mojo Molado ! Je souhaite commander :\n\n";
+    let message = `Bonjour Mojo Molado ! Je souhaite commander :\n\n`;
+    message += `👤 Client : ${customerInfo.name}\n📞 Tél : ${customerInfo.phone}\n📍 Adresse : ${customerInfo.address}\n\n`;
+    message += "Articles :\n";
     cart.forEach((item, i) => {
       const prixAffiche = item.price_display || (item.price + " FCFA");
       message += `${i + 1}. ${item.name} - ${prixAffiche} x${item.quantity}\n`;
@@ -53,7 +61,7 @@ function Cart() {
     fetch('https://mojomalado-api.onrender.com/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: cart, total, method: paymentMethod })
+      body: JSON.stringify({ items: cart, total, method: paymentMethod, customerInfo })
     }).catch(err => {
       console.error("Erreur back-end ignorée:", err);
     });
@@ -111,7 +119,9 @@ function Cart() {
               className="btn-checkout" 
               style={{ background: '#13B1E6', marginTop: 0 }}
               onClick={() => {
-                let message = "Bonjour Mojo Molado ! Je souhaite commander :\n\n";
+                let message = `Bonjour Mojo Molado ! Je souhaite commander :\n\n`;
+                message += `👤 Client : ${customerInfo.name}\n📞 Tél : ${customerInfo.phone}\n📍 Adresse : ${customerInfo.address}\n\n`;
+                message += "Articles :\n";
                 cart.forEach((item, i) => {
                   message += `${i + 1}. ${item.name} x${item.quantity}\n`;
                 });
@@ -160,6 +170,35 @@ function Cart() {
               {cart.length === 0 && <p>Panier vide.</p>}
             </div>
             
+            {cart.length > 0 && (
+              <div style={{ marginTop: '20px', padding: '20px', background: 'var(--bg-color)', borderRadius: '12px', border: '1px solid var(--border-color)', marginBottom: '20px' }}>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '16px' }}>Vos informations de livraison :</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <input 
+                    type="text" 
+                    placeholder="Votre Nom Complet" 
+                    value={customerInfo.name} 
+                    onChange={e => setCustomerInfo({...customerInfo, name: e.target.value})} 
+                    style={{ padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--surface-color)', color: 'var(--text-main)' }}
+                  />
+                  <input 
+                    type="tel" 
+                    placeholder="Votre Téléphone" 
+                    value={customerInfo.phone} 
+                    onChange={e => setCustomerInfo({...customerInfo, phone: e.target.value})} 
+                    style={{ padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--surface-color)', color: 'var(--text-main)' }}
+                  />
+                  <input 
+                    type="text" 
+                    placeholder="Votre Adresse de Livraison" 
+                    value={customerInfo.address} 
+                    onChange={e => setCustomerInfo({...customerInfo, address: e.target.value})} 
+                    style={{ padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--surface-color)', color: 'var(--text-main)' }}
+                  />
+                </div>
+              </div>
+            )}
+
             <p style={{ marginTop: '16px', fontSize: '1.8rem', textAlign: 'right' }}>
               <strong>Total: {total.toLocaleString()} FCFA</strong>
             </p>

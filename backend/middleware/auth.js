@@ -11,16 +11,15 @@ const authMiddleware = (req, res, next) => {
   }
 
   try {
-    // Note: In a real production environment with Supabase, 
-    // you would verify this token using your SUPABASE_JWT_SECRET.
-    // Since we are migrating and might not have the secret handy,
-    // we decode it to at least ensure it's a validly formed string
-    // and belongs to an authenticated user role.
+    // Verify using the Supabase JWT secret from environment variables
+    const secret = process.env.SUPABASE_JWT_SECRET;
     
-    // For higher security, you should configure the JWT secret:
-    // const decoded = jwt.verify(token, process.env.SUPABASE_JWT_SECRET);
-    
-    const decoded = jwt.decode(token);
+    if (!secret) {
+      console.error("ERREUR CRITIQUE: SUPABASE_JWT_SECRET n'est pas défini dans .env");
+      return res.status(500).json({ error: 'Configuration serveur invalide (Clé JWT manquante).' });
+    }
+
+    const decoded = jwt.verify(token, secret);
     
     if (!decoded || decoded.role !== 'authenticated') {
       return res.status(403).json({ error: 'Accès invalide ou expiré.' });

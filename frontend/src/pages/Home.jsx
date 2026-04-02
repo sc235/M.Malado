@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { supabase } from '../supabaseClient';
 
 function Home() {
   const [products, setProducts] = useState([]);
@@ -92,7 +93,10 @@ function Home() {
 
   const fetchProducts = async () => {
     try {
+      // On passe par notre backend Node pour plus de contrôle et de sécurité
       const response = await fetch('https://mojomalado-api.onrender.com/api/products');
+      if (!response.ok) throw new Error("Erreur serveur lors de la récupération des produits");
+      
       const data = await response.json();
       const shuffledData = shuffleArray([...data]);
       setProducts(shuffledData);
