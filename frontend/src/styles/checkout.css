@@ -1,0 +1,222 @@
+/* =========================================================================
+   TUNNEL D'ACHAT — page de commande et page de confirmation
+   Prolonge le design system de index.css : mêmes variables, mêmes rayons,
+   mêmes transitions. Aucune couleur en dur hors logos des moyens de paiement.
+   ========================================================================= */
+
+.checkout { padding-bottom: 90px; }
+
+.checkout-head { margin: 6px 0 30px; }
+.checkout-head h1 { font-size: clamp(1.9rem, 4vw, 2.7rem); margin-bottom: 8px; }
+.checkout-head p { color: var(--text-muted); font-size: 0.92rem; }
+
+/* Le récapitulatif accompagne la saisie au lieu de la suivre : la cliente voit
+   ce qu'elle paie pendant qu'elle remplit ses coordonnées. */
+.checkout-grid { display: grid; gap: 28px; align-items: start; }
+@media (min-width: 940px) {
+  .checkout-grid { grid-template-columns: minmax(0, 1.45fr) minmax(340px, 1fr); gap: 40px; }
+  .checkout-summary { position: sticky; top: calc(var(--header-h) + 20px); }
+}
+
+.checkout-block {
+  background: var(--surface-solid);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: clamp(20px, 3vw, 30px);
+  margin-bottom: 20px;
+}
+.checkout-block h2 {
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-body);
+  font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em;
+  margin-bottom: 18px;
+}
+.step-num {
+  width: 27px; height: 27px; flex: 0 0 27px;
+  display: grid; place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--ink); color: var(--ivory);
+  font-size: 0.8rem; font-weight: 700;
+}
+[data-theme="dark"] .step-num { background: var(--primary); color: #fff; }
+
+.field-row { display: grid; gap: 0 16px; }
+@media (min-width: 620px) { .field-row { grid-template-columns: 1fr 1fr; } }
+
+/* ------------------------------------------------------------ Récapitulatif */
+.summary-card {
+  background: var(--surface-solid);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: clamp(20px, 3vw, 26px);
+  box-shadow: var(--shadow-sm);
+}
+.summary-card > h2 {
+  font-family: var(--font-body);
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 18px;
+}
+
+.summary-items { display: grid; gap: 16px; max-height: 340px; overflow-y: auto; margin-bottom: 18px; }
+.summary-item { display: grid; grid-template-columns: 58px 1fr auto; gap: 13px; align-items: start; }
+
+.summary-thumb {
+  position: relative; display: block;
+  border-radius: var(--radius-sm); overflow: hidden; background: var(--bg-alt);
+}
+.summary-thumb img { width: 58px; height: 72px; object-fit: cover; }
+.summary-qty {
+  position: absolute; top: -7px; right: -7px;
+  min-width: 21px; height: 21px; padding: 0 5px;
+  display: grid; place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--ink); color: var(--ivory);
+  font-size: 0.7rem; font-weight: 700;
+  border: 2px solid var(--surface-solid);
+}
+[data-theme="dark"] .summary-qty { background: var(--primary); color: #fff; }
+
+.summary-item-body { min-width: 0; }
+.summary-name { display: block; font-size: 0.87rem; font-weight: 600; line-height: 1.35; }
+.summary-meta { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.summary-price { font-size: 0.87rem; font-weight: 600; white-space: nowrap; }
+
+.summary-controls { display: flex; align-items: center; gap: 6px; margin-top: 7px; }
+.summary-controls button {
+  width: 23px; height: 23px; display: grid; place-items: center;
+  border: 1px solid var(--border-color); border-radius: var(--radius-xs);
+  font-size: 0.62rem; color: var(--text-muted);
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+.summary-controls button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
+.summary-controls button:disabled { opacity: 0.35; cursor: not-allowed; }
+.summary-controls > span {
+  font-size: 0.8rem; min-width: 16px; text-align: center; font-variant-numeric: tabular-nums;
+}
+.summary-remove {
+  margin-left: auto; font-size: 0.72rem; color: var(--text-faint);
+  text-decoration: underline; text-underline-offset: 2px;
+}
+.summary-remove:hover { color: var(--danger); }
+
+/* ------------------------------------------------------------- Code promo */
+.promo-zone { padding: 16px 0; border-top: 1px solid var(--border-color); }
+.promo-label {
+  display: block; font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 7px;
+}
+.promo-row { display: flex; gap: 8px; }
+.promo-row input {
+  flex: 1; min-width: 0; padding: 10px 13px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.86rem; letter-spacing: 0.06em; text-transform: uppercase;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.promo-row input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+.promo-row .btn { flex: 0 0 auto; }
+
+.promo-applied {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 11px 14px; border-radius: var(--radius-sm);
+  background: var(--ok-soft); color: var(--ok);
+  font-size: 0.84rem;
+}
+.promo-applied strong { letter-spacing: 0.06em; }
+.promo-applied button {
+  font-size: 0.74rem; color: var(--text-muted);
+  text-decoration: underline; text-underline-offset: 2px; white-space: nowrap;
+}
+.promo-applied button:hover { color: var(--danger); }
+
+.summary-totals { padding-top: 16px; border-top: 1px solid var(--border-color); }
+.summary-row.is-discount { color: var(--ok); font-weight: 600; }
+
+.summary-trust {
+  display: grid; gap: 7px; margin-top: 18px; padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+.summary-trust li { display: flex; align-items: center; gap: 9px; font-size: 0.76rem; color: var(--text-muted); }
+.summary-trust i { color: var(--primary); width: 15px; text-align: center; }
+
+/* ====================================================== PAGE DE CONFIRMATION */
+.confirmation { padding: clamp(40px, 7vw, 80px) 0 100px; }
+
+.confirm-hero { text-align: center; margin-bottom: 40px; }
+.confirm-check {
+  width: 74px; height: 74px; margin: 0 auto 24px;
+  display: grid; place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--ok-soft); color: var(--ok);
+  font-size: 1.9rem;
+  animation: confirm-pop var(--transition-spring) both;
+}
+@keyframes confirm-pop {
+  from { transform: scale(0.4); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+.confirm-hero h1 { font-size: clamp(1.9rem, 4.5vw, 2.9rem); margin: 6px 0 14px; }
+.confirm-lead { color: var(--text-muted); font-size: 1rem; max-width: 520px; margin: 0 auto; }
+
+.confirm-ref {
+  display: inline-flex; align-items: center; gap: 14px;
+  margin-top: 26px; padding: 13px 22px;
+  border: 1px dashed var(--border-strong); border-radius: var(--radius-md);
+  background: var(--bg-alt);
+}
+.confirm-ref span {
+  font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted);
+}
+.confirm-ref strong { font-size: 1.15rem; letter-spacing: 0.08em; font-variant-numeric: tabular-nums; }
+
+/* Le transfert manuel est l'étape que la cliente doit voir en premier :
+   elle est donc encadrée en couleur d'accent, contrairement au reste. */
+.confirm-pay {
+  background: var(--surface-solid);
+  border: 1px solid var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+  border-radius: var(--radius-lg);
+  padding: clamp(20px, 3vw, 30px);
+  margin-bottom: 30px;
+}
+.confirm-pay-head { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 18px; }
+.confirm-pay-head h2 { font-family: var(--font-body); font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+.confirm-pay-head p { font-size: 0.88rem; color: var(--text-muted); }
+.confirm-pay-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.confirm-pay-actions .btn { flex: 1 1 200px; }
+
+.confirm-recap, .confirm-next {
+  background: var(--surface-solid);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: clamp(20px, 3vw, 30px);
+  margin-bottom: 24px;
+}
+.confirm-recap h2, .confirm-next h2 {
+  font-family: var(--font-body);
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 18px;
+}
+.confirm-recap .summary-items { max-height: none; }
+
+.confirm-steps { display: grid; gap: 18px; counter-reset: confirm-step; }
+@media (min-width: 700px) { .confirm-steps { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
+.confirm-steps li { position: relative; padding-left: 40px; counter-increment: confirm-step; }
+.confirm-steps li::before {
+  content: counter(confirm-step);
+  position: absolute; left: 0; top: 0;
+  width: 27px; height: 27px; display: grid; place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--primary-soft); color: var(--primary);
+  font-size: 0.78rem; font-weight: 700;
+}
+.confirm-steps strong { display: block; font-size: 0.9rem; margin-bottom: 3px; }
+.confirm-steps span { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+.confirm-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+.confirm-actions .btn { flex: 1 1 220px; justify-content: center; }

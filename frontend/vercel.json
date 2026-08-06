@@ -1,0 +1,32 @@
+{
+  "_commentaire": "Les deux destinations ci-dessous doivent porter l'adresse publique de votre API Railway (Settings > Networking > Public Domain), suivie de /sitemap.xml et /robots.txt. Vercel n'accepte pas de variable d'environnement dans une reecriture : c'est la seule valeur a modifier a la main. Tant que le marqueur REMPLACER-PAR-VOTRE-DOMAINE-RAILWAY est present, ces deux adresses repondront en erreur - c'est voulu, un sitemap silencieusement casse est pire.",
+
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://REMPLACER-PAR-VOTRE-DOMAINE-RAILWAY.up.railway.app/sitemap.xml"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "https://REMPLACER-PAR-VOTRE-DOMAINE-RAILWAY.up.railway.app/robots.txt"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*).(jpg|jpeg|png|webp|avif|svg|ico)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=2592000" }
+      ]
+    }
+  ]
+}

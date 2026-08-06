@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mojo Molado - Boutique de Mode Africaine</title>
+  <meta name="description" content="Mojo Molado - Boutique de mode africaine à Dakar. Vêtements, sacs et parfums élégants. Own your roots, Wear your culture." />
+  <meta name="keywords" content="mode africaine, Dakar, vêtements, sacs, parfums, boutique, Sénégal" />
+  <meta name="author" content="Mojo Molado" />
+  <meta property="og:title" content="Mojo Molado - Mode Africaine à Dakar" />
+  <meta property="og:description" content="Découvrez notre collection de mode africaine à Dakar. Vêtements, sacs et parfums de qualité. Own your roots, Wear your culture." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mojomolado.netlify.app" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mojo Molado - Mode Africaine" />
+  <meta name="twitter:description" content="Boutique de mode africaine à Dakar. Own your roots, Wear your culture." />
+  <link rel="canonical" href="https://mojomolado.netlify.app" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <div id="page-loader" class="loader" aria-hidden="true">
+    <div class="loader-spinner" aria-label="Chargement"></div>
+  </div>
+
+  <header class="header">
+    <button class="theme-toggle" aria-label="Changer le thème" onclick="toggleTheme()">
+      <i class="fas fa-moon"></i>
+    </button>
+    <div class="header-content">
+      <img src="images/M.png" alt="Logo Mojo Molado" class="header-logo">
+      <div>
+      <h1>Mojo Molado</h1>
+      <p>Own your roots, Wear your culture</p>
+        <p class="tagline">L’élégance africaine à portée de main</p>
+    </div>
+    </div>
+    <nav class="nav" aria-label="Navigation principale">
+      <button onclick="navigateTo('home')">Accueil</button>
+      <button onclick="navigateTo('shop')">Boutique</button>
+      <button onclick="navigateTo('about')">À propos</button>
+      <button onclick="navigateTo('contact')">Contact</button>
+      <button onclick="window.location.href='admin.html'">Admin</button>
+    </nav>
+  </header>
+
+  <div class="icons">
+    <button class="icon-button" onclick="toggleWishlist()" aria-label="Voir les favoris">
+      <i class="fas fa-heart" aria-hidden="true"></i>
+      <span id="wishlist-count" class="badge">0</span>
+    </button>
+    <button class="icon-button" onclick="toggleCart()" aria-label="Voir le panier">
+      <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+      <span id="cart-count" class="badge">0</span>
+    </button>
+  </div>
+
+  <section class="search-bar">
+    <input type="search" id="search-input" placeholder="Rechercher un produit…" oninput="searchProducts()" aria-label="Rechercher" />
+    <select id="sort-select" onchange="sortProducts()" aria-label="Trier les produits">
+      <option value="default">Trier par</option>
+      <option value="price-asc">Prix : Croissant</option>
+      <option value="price-desc">Prix : Décroissant</option>
+      <option value="name-asc">Nom : A–Z</option>
+      <option value="name-desc">Nom : Z–A</option>
+    </select>
+    <div class="filters">
+      <button onclick="filterCategory('Tous')">Tous</button>
+      <button onclick="filterCategory('Vêtements')">Vêtements</button>
+      <button onclick="filterCategory('Sacs')">Sacs</button>
+      <button onclick="filterCategory('Parfums')">Parfums</button>
+  </div>
+  </section>
+
+  <main id="shop">
+    <h2 id="section-title">Nos Articles</h2>
+    <div id="status-message" aria-live="polite"></div>
+    <div id="loader" class="loader" aria-hidden="true"></div>
+    <div id="product-list" class="product-grid" aria-live="polite"></div>
+    <div style="text-align:center; margin-top:16px;">
+      <button id="load-more" style="display:none;" onclick="loadMore()">Afficher plus</button>
+    </div>
+  </main>
+
+  <section id="about" style="max-width: 900px; margin: 30px auto; padding: 16px;">
+    <h2>À propos</h2>
+    <p>Bienvenue chez Mojo Molado, votre destination mode à Dakar.
+      Née de la passion pour le style africain et l’artisanat d’exception, la boutique réunit des vêtements, sacs, parfums et bien d’autres articles tendance.
+      Chaque produit est soigneusement sélectionné pour sa qualité, ses finitions impeccables et son charme authentique.
+      Chez Mojo Molado, nous croyons que la mode est une façon de s’exprimer — avec confiance, élégance et identité.</p>
+  </section>
+
+  <section id="contact" style="max-width: 900px; margin: 0 auto 30px; padding: 16px;">
+    <h2>Contact</h2>
+    <p>WhatsApp: <a href="https://wa.me/221710433624" target="_blank" rel="noopener">+221 71 043 36 24</a></p>
+    <p>TikTok: <a href="https://www.tiktok.com/@mojomalado_?lang=fr" target="_blank" rel="noopener">@mojomolado</a></p>
+    <p>Adresse: Dakar, Sandaga, Rue Thiong</p>
+  </section>
+
+  <section class="newsletter">
+    <h3>Newsletter</h3>
+    <div class="newsletter-form">
+      <input type="email" id="newsletter-email" placeholder="Votre email" aria-label="Email newsletter">
+      <button onclick="subscribeNewsletter()">S’abonner</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2025 Mojo Molado — Dakar, Sandaga, Rue Thiong</p>
+    <div class="social-links">
+      
+      <a href="https://www.tiktok.com/@mojomalado_?lang=fr" target="_blank" rel="noopener" aria-label="Tiktok"><i class="fab fa-tiktok"></i></a>
+      <a href="https://wa.me/221776276363" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    </div>
+  </footer>
+
+  <button class="back-to-top" onclick="scrollToTop()" aria-label="Retour en haut">
+    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+  </button>
+
+  <!-- Modals -->
+  <div id="product-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-name" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()" aria-label="Fermer">×</button>
+      <img id="modal-image" src="" alt="Produit" />
+      <h3 id="modal-name" tabindex="-1"></h3>
+      <p id="modal-price"></p>
+      <p id="modal-description"></p>
+      <div class="rating" id="modal-rating"></div>
+      <button id="modal-add-cart" onclick="addToCartFromModal()">Ajouter au panier</button>
+      <button onclick="addToWishlistFromModal()">Ajouter aux favoris</button>
+      <button onclick="closeModalToHome()">Retour à la boutique</button>
+    </div>
+  </div>
+
+  <div id="cart-modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeCart()" aria-label="Fermer">×</button>
+      <h2>Votre Panier</h2>
+      <div id="cart-items"></div>
+      <p><strong>Total: <span id="cart-total">0 FCFA</span></strong></p>
+      <button onclick="checkout()">Commander via WhatsApp</button>
+    </div>
+  </div>
+
+  <div id="wishlist-modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeWishlist()" aria-label="Fermer">×</button>
+      <h2>Vos Favoris</h2>
+      <div id="wishlist-items"></div>
+    </div>
+  </div>
+
+  <div id="newsletter-modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeNewsletterModal()" aria-label="Fermer">×</button>
+      <h2>Inscription réussie</h2>
+      <p>Merci ! Vous recevrez bientôt nos offres et nouveautés.</p>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

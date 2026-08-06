@@ -1,0 +1,31 @@
+[
+  { "id": 1, "name": "Robe beige", "category": "Vêtements", "price": 15000, "priceDisplay": "15 000 FCFA", "image": "robes.images/robeBaige.jpg", "description": "Robe beige élégante en tissu africain.", "rating": 4.6 },
+  { "id": 2, "name": "Robe blanc et vert", "category": "Vêtements", "price": 15000, "priceDisplay": "15 000 FCFA", "image": "robes.images/robeBlancVert.jpg", "description": "Robe blanche et verte au style raffiné.", "rating": 4.5 },
+  { "id": 3, "name": "Robe bleu clair", "category": "Vêtements", "price": 15000, "priceDisplay": "15 000 FCFA", "image": "robes.images/robeBleuClair.jpg", "description": "Robe bleu clair, légère et confortable.", "rating": 4.5 },
+  { "id": 4, "name": "Robe gris/bleu", "category": "Vêtements", "price": 15000, "priceDisplay": "15 000 FCFA", "image": "robes.images/robeGreyBlue1.jpg", "description": "Robe bicolore gris/bleu moderne.", "rating": 4.4 },
+  { "id": 5, "name": "Robe jaune/rose", "category": "Vêtements", "price": 15000, "priceDisplay": "15 000 FCFA", "image": "robes.images/robeJauneRose.jpg", "description": "Robe lumineuse jaune et rose.", "rating": 4.5 },
+  { "id": 6, "name": "Robe rose clair", "category": "Vêtements", "price": 15000, "priceDisplay": "15 000 FCFA", "image": "robes.images/robeRoseClair.jpg", "description": "Robe rose clair, douce et élégante.", "rating": 4.6 },
+  { "id": 7, "name": "Robe rouge", "category": "Vêtements", "price": 15000, "priceDisplay": "15 000 FCFA", "image": "robes.images/robeRouge.jpg", "description": "Robe rouge classique et chic.", "rating": 4.7 },
+  { "id": 8, "name": "Robe vert/violet", "category": "Vêtements", "price": 15000, "priceDisplay": "15 000 FCFA", "image": "robes.images/robeVertViolet.jpg", "description": "Robe vert et violet au motif unique.", "rating": 4.6 },
+ 
+
+  { "id": 20, "name": "Sac vert", "category": "Sacs", "price": 22000, "priceDisplay": "22 000 FCFA", "image": "sac.images/greenBag.jpg", "description": "Sac à main vert tressé, robuste.", "rating": 4.6 },
+  { "id": 21, "name": "Sac gris", "category": "Sacs", "price": 22000, "priceDisplay": "22 000 FCFA", "image": "sac.images/greyBag.jpg", "description": "Sac à main gris élégant.", "rating": 4.5 },
+  { "id": 22, "name": "Sac LV", "category": "Sacs", "price": 35000, "priceDisplay": "35 000 FCFA", "image": "sac.images/luisVbag.jpg", "description": "Sac inspiré LV, style premium.", "rating": 4.7 },
+  { "id": 23, "name": "Sac multicolor", "category": "Sacs", "price": 24000, "priceDisplay": "24 000 FCFA", "image": "sac.images/Multicolorbag1.jpg", "description": "Sac multicolore vibrant.", "rating": 4.5 },
+  { "id": 24, "name": "Sac rose", "category": "Sacs", "price": 22000, "priceDisplay": "22 000 FCFA", "image": "sac.images/pinkBag.jpg", "description": "Sac à main rose, féminin.", "rating": 4.4 },
+  { "id": 25, "name": "Sac violet", "category": "Sacs", "price": 22000, "priceDisplay": "22 000 FCFA", "image": "sac.images/purplebag.jpg", "description": "Sac violet sophistiqué.", "rating": 4.5 },
+  { "id": 26, "name": "Sac à main beige", "category": "Sacs", "price": 22000, "priceDisplay": "22 000 FCFA", "image": "sac.images/sacAmainBaige.jpg", "description": "Sac à main beige, intemporel.", "rating": 4.6 },
+  { "id": 27, "name": "Sac à main bleu clair", "category": "Sacs", "price": 22000, "priceDisplay": "22 000 FCFA", "image": "sac.images/sacAmainBleuClair.jpg", "description": "Sac à main bleu clair.", "rating": 4.5 },
+  { "id": 28, "name": "Sac YSL", "category": "Sacs", "price": 38000, "priceDisplay": "38 000 FCFA", "image": "sac.images/yslBag.jpg", "description": "Sac style YSL élégant.", "rating": 4.7 },
+  { "id": 29, "name": "Grand sac YSL", "category": "Sacs", "price": 42000, "priceDisplay": "42 000 FCFA", "image": "sac.images/YSLbigbag.jpg", "description": "Grand sac style YSL.", "rating": 4.7 },
+
+  { "id": 40, "name": "Parfum Ameena", "category": "Parfums", "price": 9000, "priceDisplay": "9 000 FCFA", "image": "parfum.images/ameena.jpg", "description": "Parfum délicat et frais.", "rating": 4.4 },
+  { "id": 41, "name": "Parfum Emaan", "category": "Parfums", "price": 9500, "priceDisplay": "9 500 FCFA", "image": "parfum.images/Emaan.jpg", "description": "Parfum aux notes florales.", "rating": 4.5 },
+  { "id": 42, "name": "Gel Bushra", "category": "Parfums", "price": 8000, "priceDisplay": "8 000 FCFA", "image": "parfum.images/GelBushra.jpg", "description": "Gel parfumé, longue tenue.", "rating": 4.3 },
+  { "id": 43, "name": "Mix 45", "category": "Parfums", "price": 9000, "priceDisplay": "9 000 FCFA", "image": "parfum.images/mix45parfum.jpg", "description": "Parfum mix intense.", "rating": 4.5 },
+  { "id": 44, "name": "Victoria", "category": "Parfums", "price": 9500, "priceDisplay": "9 500 FCFA", "image": "parfum.images/victoria.jpg", "description": "Parfum Victoria classique.", "rating": 4.6 },
+  { "id": 45, "name": "Victoria Brown", "category": "Parfums", "price": 9500, "priceDisplay": "9 500 FCFA", "image": "parfum.images/victoriaBrown.jpg", "description": "Parfum Victoria Brown.", "rating": 4.5 },
+  { "id": 46, "name": "Victoria Green", "category": "Parfums", "price": 9500, "priceDisplay": "9 500 FCFA", "image": "parfum.images/victoriaGreen.jpg", "description": "Parfum Victoria Green.", "rating": 4.5 },
+  { "id": 47, "name": "Victoria Purple", "category": "Parfums", "price": 9500, "priceDisplay": "9 500 FCFA", "image": "parfum.images/victoriaPurple.jpg", "description": "Parfum Victoria Purple.", "rating": 4.5 }
+]
