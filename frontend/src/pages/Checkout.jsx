@@ -18,11 +18,9 @@ import Seo from '../components/Seo';
    ========================================================================== */
 
 const METHODS = [
-  { id: 'wave',         label: 'Wave',                    desc: 'Paiement instantané depuis votre application Wave', icon: 'fas fa-water',               cls: 'wave' },
-  { id: 'orange_money', label: 'Orange Money',            desc: 'Payez depuis votre compte Orange Money',            icon: 'fas fa-mobile-screen',       cls: 'om' },
-  { id: 'card',         label: 'Carte bancaire',          desc: 'Visa & Mastercard, authentification 3-D Secure',    icon: 'fas fa-credit-card',         cls: 'card' },
-  { id: 'livraison',    label: 'Paiement à la livraison', desc: 'Réglez en espèces à la réception (Dakar)',          icon: 'fas fa-hand-holding-dollar', cls: 'cash' },
-  { id: 'whatsapp',     label: 'Commander sur WhatsApp',  desc: 'On finalise ensemble par message',                  icon: 'fab fa-whatsapp',            cls: 'wa' },
+  { id: 'wave',      label: 'Wave',                    desc: 'Paiement instantané direct depuis votre application Wave', icon: 'fas fa-water',               cls: 'wave' },
+  { id: 'livraison', label: 'Paiement à la livraison', desc: 'Réglez en espèces lors de la livraison (Dakar)',         icon: 'fas fa-hand-holding-dollar', cls: 'cash' },
+  { id: 'whatsapp',  label: 'Commander sur WhatsApp',  desc: 'Finaliser et échanger directement sur WhatsApp',          icon: 'fab fa-whatsapp',            cls: 'wa' },
 ];
 
 const CITIES = ['Dakar', 'Pikine', 'Guédiawaye', 'Rufisque', 'Keur Massar', 'Thiès',
