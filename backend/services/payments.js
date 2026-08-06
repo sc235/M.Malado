@@ -219,6 +219,45 @@ async function waveCheckout({ total, reference }) {
   return { checkout_url: data.wave_launch_url, transaction_id: data.id };
 }
 
+/* -------------------------------------------------------------------------
+   Paystack — https://paystack.com / https://paystack.com/docs/api/
+   Cartes bancaires, Wave, Orange Money, Mobile Money multi-pays.
+   ---------------------------------------------------------------------- */
+async function paystackCheckout({ total, customerInfo, reference }) {
+  const secretKey = process.env.PAYSTACK_SECRET_KEY;
+  if (!secretKey) throw new PaymentNotConfigured('Clé secrète Paystack (PAYSTACK_SECRET_KEY) manquante.');
+
+  const email = (customerInfo.email || '').trim() || `${(customerInfo.phone || 'client').replace(/\D/g, '')}@mojomalado.com`;
+  const currency = process.env.PAYSTACK_CURRENCY || 'XOF';
+
+  const res = await fetch('https://api.paystack.co/transaction/initialize', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${secretKey}`,
+    },
+    body: JSON.stringify({
+      email,
+      amount: Math.round(Number(total) * 100), // Paystack requiert le montant en sous-unités (1 XOF = 100 sous-unités)
+      currency,
+      reference,
+      callback_url: urls.success,
+      metadata: {
+        client_name: customerInfo.name,
+        client_phone: customerInfo.phone,
+        cancel_action: urls.cancel,
+      },
+    }),
+  });
+
+  const data = await res.json();
+  if (!data.status || !data.data?.authorization_url) {
+    throw new Error(data.message || 'Paystack a refusé l’initialisation de la transaction.');
+  }
+
+  return { checkout_url: data.data.authorization_url, transaction_id: reference };
+}
+
 /* ---------------------------------------------------------------------- */
 
 function normalizeSenegalPhone(raw = '') {
@@ -233,6 +272,7 @@ const ADAPTERS = {
   cinetpay: cinetpayCheckout,
   naboopay: naboopayCheckout,
   wave: waveCheckout,
+  paystack: paystackCheckout,
 };
 
 /**
@@ -320,6 +360,17 @@ const VERIFIERS = {
     const data = await res.json();
     if (data.payment_status === 'succeeded') return 'paye';
     if (data.checkout_status === 'expired') return 'echoue';
+    return 'en_attente';
+  },
+
+  async paystack(reference) {
+    const res = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
+      headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` },
+    });
+    const data = await res.json();
+    const status = data?.data?.status;
+    if (status === 'success') return 'paye';
+    if (['failed', 'abandoned'].includes(status)) return 'echoue';
     return 'en_attente';
   },
 };
