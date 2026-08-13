@@ -1,6 +1,4 @@
 {
-  "_commentaire": "Les deux destinations ci-dessous doivent porter l'adresse publique de votre API Railway (Settings > Networking > Public Domain), suivie de /sitemap.xml et /robots.txt. Vercel n'accepte pas de variable d'environnement dans une reecriture : c'est la seule valeur a modifier a la main. Tant que le marqueur REMPLACER-PAR-VOTRE-DOMAINE-RAILWAY est present, ces deux adresses repondront en erreur - c'est voulu, un sitemap silencieusement casse est pire.",
-
   "rewrites": [
     {
       "source": "/sitemap.xml",
