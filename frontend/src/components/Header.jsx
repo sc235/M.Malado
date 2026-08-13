@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
-import { SHOP } from '../lib/api';
+import { SHOP, getToken } from '../lib/api';
 
 const LINKS = [
   { to: '/', label: 'Accueil' },
@@ -104,6 +104,12 @@ export default function Header() {
               aria-label={theme === 'dark' ? 'Thème clair' : 'Thème sombre'}>
               <i className={theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon'} aria-hidden="true" />
             </button>
+
+            {getToken('admin') && (
+              <Link to="/gestion-mojo-privee" className="icon-btn" aria-label="Administration" title="Administration">
+                <i className="fas fa-cog" aria-hidden="true" />
+              </Link>
+            )}
 
             <div className="account-menu-wrap">
               <button

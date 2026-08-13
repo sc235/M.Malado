@@ -1,96 +1,91 @@
-# 👑 Mojo Molado - Boutique de Mode Africaine & Accessoires
+# 👑 Mojo Malado - L'Élégance Africaine Contemporaine
 
-Bienvenue dans le dépôt de **Mojo Molado**, une boutique en ligne haut de gamme dédiée à la mode africaine contemporaine, aux sacs de créateurs, aux sandales et aux parfums d'exception. 
+Bienvenue dans le dépôt officiel de **Mojo Malado**, une plateforme e-commerce premium dédiée à la mode africaine, aux sacs de créateurs, aux sandales et aux parfums d'exception. 
 
-Cette plateforme moderne combine un design luxueux côté utilisateur et un panneau d'administration puissant et sécurisé pour gérer les ventes et le catalogue.
-
----
-
-## 🚀 Fonctionnalités Clés
-
-### Côté Client (Frontend)
-* **Design Luxueux & Immersif** : Esthétique premium avec typographie élégante (*Outfit* et *Playfair Display*), basculement dynamique du thème sombre/clair, et animations fluides.
-* **Bannière Héro & Grille d'Avantages** : Section d'accueil haut de gamme et mise en avant des services phares (Livraison Express, Qualité Premium, Commande WhatsApp).
-* **Catalogue Dynamique** : Recherche textuelle instantanée, filtrage par catégorie (Vêtements, Sandales, Sacs, Parfums) et tri par prix.
-* **Panier & Liste de Souhaits (Wishlist)** : Expérience d'achat fluide avec mise à jour en temps réel des articles.
-* **Intégration WhatsApp & Passerelles de Paiement** :
-  * Commande directe par message WhatsApp pré-rempli.
-  * Paiement en ligne via **NabooPay** (Wave, Orange Money) avec redirection et traitement des statuts.
-  * Achat express Wave en mode simulation.
-* **Avis Clients** : Espace interactif pour laisser et consulter les avis de la communauté.
-
-### Espace Administration (Gestion Privée)
-* **Tableau de Bord des Ventes** : Graphique d'activité interactif (via *Recharts*) et historique des transactions avec suivi automatique des statuts de paiement (NabooPay webhook).
-* **Gestion du Catalogue** :
-  * Ajout de nouveaux produits avec upload d'images.
-  * Modification inline du **nom du produit** (via bouton crayon `✏️`).
-  * Modification rapide de la **catégorie** (via liste déroulante instantanée).
-  * Modification rapide du **prix** de vente.
-  * Suppression de produits.
-* **Gestion des Accès** : Possibilité de créer de nouveaux comptes administrateurs de confiance.
+Conçue pour offrir une expérience utilisateur luxueuse, cette plateforme allie une vitrine immersive côté client à un puissant système d'administration (ERP/CRM) invisible, permettant une gestion fluide du catalogue, des commandes et des clients.
 
 ---
 
-## 🛠️ Stack Technique
+## ✨ Fonctionnalités Principales
 
-* **Frontend** : React.js, Vite, React Router DOM, Recharts, CSS3 (variables de thèmes, animations).
-* **Backend** : Node.js, Express, JWT (JSON Web Tokens), Bcryptjs, Helmet & Rate-Limiter (sécurisation des requêtes).
-* **Base de données** : PostgreSQL (`pg` pool).
+### 🛍️ Vitrine Client (Frontend)
+- **Expérience Premium & UI Immersive :** Un design raffiné avec basculement fluide entre le thème sombre et clair, animations subtiles et typographie soignée (Outfit & Playfair Display).
+- **Parcours d'Achat Optimisé :** Catalogue dynamique avec recherche instantanée, filtrage par catégories, panier persistant et système de favoris (Wishlist).
+- **Paiements Flexibles & Locaux :** 
+  - Intégration transparente pour payer via **Wave**, **Orange Money** et **Cartes Bancaires**.
+  - Possibilité de finaliser sa commande directement sur **WhatsApp** via des messages automatisés.
+- **Transparence & Confiance :** Suivi des commandes en temps réel et système d'avis vérifiés.
+
+### 🛡️ Espace Administration (Gestion Privée)
+- **Interface Cloisonnée :** Un tableau de bord privé, accessible de manière sécurisée (protégé par JWT), invisible pour les visiteurs classiques. L'accès est simplifié via un lien discret dans le footer pour le personnel autorisé.
+- **Dashboard Analytique :** Suivi en temps réel des performances des ventes grâce à des graphiques dynamiques (*Recharts*).
+- **Gestion Avancée du Catalogue :** Ajout, modification inline des stocks, prix, et descriptions. Upload et gestion optimisée des images produits.
+- **Suivi des Commandes :** Historique complet des transactions, gestion des statuts de livraison, et traçabilité des paiements via webhooks.
 
 ---
 
-## ⚙️ Configuration & Installation
+## 🛠️ Stack Technologique (Moderne & Performante)
+
+- **Frontend :** [React.js](https://reactjs.org/) propulsé par [Vite](https://vitejs.dev/) pour une vélocité maximale. Routage via React Router, gestion de l'état avancée.
+- **Backend :** [Node.js](https://nodejs.org/) & [Express](https://expressjs.com/), architecture robuste avec middlewares de sécurité (Helmet, Rate-Limiter).
+- **Base de Données :** [PostgreSQL](https://www.postgresql.org/), robuste et relationnel, interfacé via `pg`.
+- **Authentification :** JSON Web Tokens (JWT) et hachage sécurisé (Bcryptjs).
+
+---
+
+## 🚀 Installation & Lancement (Local)
 
 ### 1. Prérequis
-Vous devez disposer de **Node.js** (v16+) et d'une instance **PostgreSQL** active (locale ou hébergée en ligne comme Render, Neon ou Supabase).
+- **Node.js** (v18+)
+- **PostgreSQL** installé et configuré localement.
 
-### 2. Configuration du Backend
-1. Rendez-vous dans le dossier `backend/`.
-2. Créez ou modifiez le fichier `.env` et configurez vos variables d'environnement :
-   ```env
-   # Port d'écoute du serveur
-   PORT=5000
+### 2. Démarrage de l'API (Backend)
+```bash
+cd backend
+# 1. Configurer l'environnement : dupliquez .env.example vers .env
+cp .env.example .env
 
-   # Chaîne de connexion PostgreSQL (Exemple local)
-   DATABASE_URL=postgres://postgres:motdepasse@localhost:5432/mojomalado
+# 2. Renseignez la variable DATABASE_URL dans votre fichier .env 
+# (ex: postgresql://postgres:motdepasse@localhost:5432/mojomalado)
 
-   # Clé secrète de chiffrement des tokens de session admin
-   SUPABASE_JWT_SECRET=votre_cle_secrete_jwt
+# 3. Installer les dépendances
+npm install
 
-   # Clés API de Paiement (NabooPay, Wave...)
-   NABOO_API_KEY=votre_cle_api_naboopay
-   WAVE_API_KEY=votre_cle_api_wave
-   ```
+# 4. Initialiser la base (création des tables, produits et compte admin)
+npm run setup
 
-3. Installez les dépendances et démarrez le serveur :
-   ```bash
-   npm install
-   npm start
-   ```
-   *Note : Le backend détecte automatiquement si la base de données `mojomalado` et les tables associées existent. Si elles sont absentes, il les crée et injecte automatiquement les 26 produits initiaux ainsi que le compte administrateur par défaut :*
-   * **Email** : `habib@gmail.com`
-   * **Mot de passe** : `habib123`
+# 5. Lancer le serveur (Port 5000)
+npm run dev
+```
 
-### 3. Configuration du Frontend
-1. Rendez-vous dans le dossier `frontend/`.
-2. Installez les dépendances et démarrez le serveur de développement :
-   ```bash
-   npm install
-   npm run dev
-   ```
-3. Le site web est désormais accessible sur **`http://localhost:5173/`**.
+### 3. Démarrage de la Boutique (Frontend)
+```bash
+cd frontend
+# 1. Installer les dépendances
+npm install
+
+# 2. Lancer l'interface web (Port 5173 par défaut)
+npm run dev
+```
+La plateforme est maintenant accessible sur **[http://localhost:5173](http://localhost:5173)**.
 
 ---
 
-## 🔒 Accès aux URL Administrateur
+## 🔐 Accès à l'Espace Administrateur
 
-* **Page de connexion secrète** : `http://localhost:5173/secret-mojo-gate` (ou `https://mojo-malado.vercel.app/secret-mojo-gate` en production)
-* **Tableau de bord protégé** : `http://localhost:5173/gestion-mojo-privee` (ou `https://mojo-malado.vercel.app/gestion-mojo-privee` en production)
+Lors de l'étape `npm run setup`, un compte administrateur est créé en fonction des variables `ADMIN_EMAIL` et `ADMIN_PASSWORD` définies dans votre `.env`.
+
+* **Connexion :** Cliquez sur le lien "Administration" dans le pied de page du site ou rendez-vous sur `/secret-mojo-gate`.
+* **Identifiants par défaut (si non modifiés) :**
+  * **Email :** `oumousy@mmalado.com`
+  * **Mot de passe :** `Dcba4321@`
+
+Une fois connecté, une icône **⚙️ (Paramètres)** apparaît dans la barre de navigation du site principal pour basculer facilement vers le tableau de bord privé (`/gestion-mojo-privee`).
 
 ---
 
 ## 🌐 Déploiement
 
-* **Frontend** : Déployé sur **Vercel**. Les commits sur la branche `main` déclenchent un déploiement automatique.
-* **Backend** : Déployé sur **Render**. Pensez à configurer la variable d'environnement `DATABASE_URL` dans l'onglet *Environment* de votre Web Service sur Render.
-* **Base de données** : PostgreSQL hébergé en ligne (par exemple sur Render Database).
+Le projet est conçu pour être facilement déployé sur les plateformes cloud modernes :
+- **Frontend :** Déploiement optimal "Zéro-Config" sur **Vercel** ou Netlify.
+- **Backend & Base de données :** Déploiement automatique recommandé sur **Railway** (fichier `railway.json` inclus) ou **Render**.

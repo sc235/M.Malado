@@ -85,6 +85,7 @@ export default function Footer() {
                 <li><Link to="/inscription">Créer un compte</Link></li>
                 <li><Link to="/compte/commandes">Mes commandes</Link></li>
                 <li><Link to="/suivi">Suivre une commande</Link></li>
+                <li><Link to="/secret-mojo-gate">Administration</Link></li>
               </ul>
             </div>
 
