@@ -76,9 +76,7 @@ La plateforme est maintenant accessible sur **[http://localhost:5173](http://loc
 Lors de l'étape `npm run setup`, un compte administrateur est créé en fonction des variables `ADMIN_EMAIL` et `ADMIN_PASSWORD` définies dans votre `.env`.
 
 * **Connexion :** Cliquez sur le lien "Administration" dans le pied de page du site ou rendez-vous sur `/secret-mojo-gate`.
-* **Identifiants par défaut (si non modifiés) :**
-  * **Email :** `oumousy@mmalado.com`
-  * **Mot de passe :** `Dcba4321@`
+* **Identifiants par défaut :** Ce sont ceux que vous avez configurés dans votre fichier `.env` (`ADMIN_EMAIL` et `ADMIN_PASSWORD`).
 
 Une fois connecté, une icône **⚙️ (Paramètres)** apparaît dans la barre de navigation du site principal pour basculer facilement vers le tableau de bord privé (`/gestion-mojo-privee`).
 
